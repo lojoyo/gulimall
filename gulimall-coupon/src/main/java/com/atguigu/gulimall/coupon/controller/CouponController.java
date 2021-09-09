@@ -26,11 +26,44 @@ import com.atguigu.gulimall.common.utils.R;
  * @email lojoyo@yeah.net
  * @date 2021-09-09 21:20:28
  */
+@RefreshScope
 @RestController
 @RequestMapping("coupon/coupon")
 public class CouponController {
     @Autowired
     private CouponService couponService;
+
+
+    /**
+     * 测试nacos配置中心
+     */
+    @Value("${test.name}")
+    private String name;
+    @Value("${test.age}")
+    private String age;
+
+    /**
+     * 测试nacos配置中心
+     * @return
+     */
+    @RequestMapping("/test")
+    public R test(){
+        return R.ok().put("name",name).put("age",age);
+    }
+
+
+    /**
+     * 测试nacos注册中心，返回全部的会员优惠劵
+     * @return
+     */
+    @RequestMapping("/member/list")
+    public R memberCoupons(){
+        // 模拟数据库
+        CouponEntity couponEntity = new CouponEntity();
+        couponEntity.setCouponName("满100-10");
+        return R.ok().put("coupons",Arrays.asList(couponEntity));
+    }
+
 
     /**
      * 列表
