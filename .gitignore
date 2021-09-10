@@ -41,3 +41,6 @@ build/
 ### 忽略 .vagrant 和 Vagrantfile
 .vagrant
 Vagrantfile
+
+### 不要忽略 renren-fast-vue 的 build 文件夹
+!/renren-fast-vue/build
