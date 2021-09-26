@@ -1,22 +1,16 @@
 package com.atguigu.gulimall.coupon.controller;
 
-import java.util.Arrays;
-import java.util.Map;
-
+import com.atguigu.gulimall.common.utils.PageUtils;
+import com.atguigu.gulimall.common.utils.R;
+import com.atguigu.gulimall.coupon.entity.CouponEntity;
+import com.atguigu.gulimall.coupon.service.CouponService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.atguigu.gulimall.coupon.entity.CouponEntity;
-import com.atguigu.gulimall.coupon.service.CouponService;
-import com.atguigu.gulimall.common.utils.PageUtils;
-import com.atguigu.gulimall.common.utils.R;
-
+import java.util.Arrays;
+import java.util.Map;
 
 
 /**
@@ -61,7 +55,7 @@ public class CouponController {
         // 模拟数据库
         CouponEntity couponEntity = new CouponEntity();
         couponEntity.setCouponName("满100-10");
-        return R.ok().put("coupons",Arrays.asList(couponEntity));
+        return R.ok().put("coupons", Arrays.asList(couponEntity));
     }
 
 

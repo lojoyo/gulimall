@@ -3,6 +3,9 @@ server:
   port: 88
 
 spring:
+  #服务名称（Nacos需要微服务名称）
+  application:
+    name: gulimall-gateway
   cloud:
     #Nacos注册中心
     nacos:
@@ -11,14 +14,37 @@ spring:
     #Gateway网关
     gateway:
       routes:
-        - id: test_route
-          uri: https://www.baidu.com
+        - id: product_route
+          uri: lb://gulimall-product
           predicates:
-            - Query=url,baidu
-        - id: qq_route
-          uri: https://www.qq.com
+            - Path=/api/product/**
+          filters:
+            - RewritePath=/api/(?<segment>.*),/$\{segment}
+
+        - id: third_party_route
+          uri: lb://gulimall-third-party
           predicates:
-            - Query=url,qq
-  #服务名称（Nacos需要微服务名称）
-  application:
-    name: gulimall-gateway
+            - Path=/api/thirdparty/**
+          filters:
+            - RewritePath=/api/thirdparty/(?<segment>.*),/$\{segment}
+
+        - id: member_route
+          uri: lb://gulimall-member
+          predicates:
+            - Path=/api/member/**
+          filters:
+            - RewritePath=/api/(?<segment>.*),/$\{segment}
+
+        - id: ware_route
+          uri: lb://gulimall-ware
+          predicates:
+            - Path=/api/ware/**
+          filters:
+            - RewritePath=/api/(?<segment>.*),/$\{segment}
+
+        - id: admin_route
+          uri: lb://renren-fast
+          predicates:
+            - Path=/api/**
+          filters:
+            - RewritePath=/api/(?<segment>.*),/renren-fast/$\{segment}
