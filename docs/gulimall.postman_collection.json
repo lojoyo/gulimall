@@ -1,0 +1,128 @@
+{
+	"info": {
+		"_postman_id": "50e69ad3-ee52-47e8-831a-3b936c6b41c3",
+		"name": "gulimall",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "product",
+			"item": [
+				{
+					"name": "category",
+					"item": [
+						{
+							"name": "树形数据",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:88/api/product/category/list/tree",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "88",
+									"path": [
+										"api",
+										"product",
+										"category",
+										"list",
+										"tree"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "类别信息",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:88/api/product/category/info/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "88",
+									"path": [
+										"api",
+										"product",
+										"category",
+										"info",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "批量修改",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "[{\"catId\":1433,\"parentCid\":2,\"catLevel\":2},{\"catId\":1434,\"sort\":1}]",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:88/api/product/category/update/sort",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "88",
+									"path": [
+										"api",
+										"product",
+										"category",
+										"update",
+										"sort"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "批量删除（逻辑删除）",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "[299]",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:88/api/product/category/delete",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "88",
+									"path": [
+										"api",
+										"product",
+										"category",
+										"delete"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}

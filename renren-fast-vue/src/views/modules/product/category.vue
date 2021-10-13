@@ -1,5 +1,12 @@
 <template>
   <div>
+    <el-switch
+      v-model="draggable"
+      active-text="开启拖拽"
+      inactive-text="关闭拖拽"
+    ></el-switch>
+    <el-button v-if="draggable" @click="batchSave">批量保存</el-button>
+    <el-button type="danger" @click="batchDelete">批量删除</el-button>
     <el-tree
       :data="menus"
       :props="defaultProps"
@@ -7,9 +14,10 @@
       show-checkbox
       node-key="catId"
       :default-expanded-keys="expandedKey"
-      :draggable="true"
+      :draggable="draggable"
       :allow-drop="allowDrop"
       @node-drop="handleDrop"
+      ref="menuTree"
     >
       <span class="custom-tree-node" slot-scope="{ node, data }">
         <span>{{ node.label }}</span>
@@ -65,7 +73,10 @@
 
 <script>
 export default {
+  // import引入的组件需要注入到对象中才能使用
   name: "category",
+  components: {},
+  props: {},
   data() {
     return {
       pCid: [],
@@ -108,6 +119,56 @@ export default {
         console.log("成功获取到菜单数据...", data.data);
         // 菜单数据绑定
         this.menus = data.data;
+      });
+    },
+
+    // 批量删除
+    batchDelete() {
+      let catIds = [];
+      let checkedNodes = this.$refs.menuTree.getCheckedNodes();
+      console.log("被选中的元素", checkedNodes);
+      for (let i = 0; i < checkedNodes.length; i++) {
+        catIds.push(checkedNodes[i].catId);
+      }
+      this.$confirm(`是否批量删除【${catIds}】菜单?`, "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          this.$http({
+            url: this.$http.adornUrl("/product/category/delete"),
+            method: "post",
+            data: this.$http.adornData(catIds, false),
+          }).then(({ data }) => {
+            this.$message({
+              message: "菜单批量删除成功",
+              type: "success",
+            });
+            this.getMenus();
+          });
+        })
+        .catch(() => {});
+    },
+
+    // 批量保存
+    batchSave() {
+      this.$http({
+        url: this.$http.adornUrl("/product/category/update/sort"),
+        method: "post",
+        data: this.$http.adornData(this.updateNodes, false),
+      }).then(({ data }) => {
+        this.$message({
+          message: "菜单顺序等修改成功",
+          type: "success",
+        });
+        //刷新出新的菜单
+        this.getMenus();
+        //设置需要默认展开的菜单
+        this.expandedKey = this.pCid;
+        this.updateNodes = [];
+        this.maxLevel = 0;
+        // this.pCid = 0;
       });
     },
 
@@ -154,20 +215,22 @@ export default {
 
       // 3、当前拖拽节点的最新层级
       console.log("updateNodes", this.updateNodes);
-      this.$http({
-        url: this.$http.adornUrl("/product/category/update/sort"),
-        method: "post",
-        data: this.$http.adornData(this.updateNodes, false),
-      }).then(({ data }) => {
-        this.$message({
-          message: "菜单顺序修改成功",
-          type: "success",
-        });
-        // 刷新出新的菜单
-        this.getMenus();
-        // 设置需要默认展开的菜单
-        this.expandedKey = [this.pCid];
-      });
+      // this.$http({
+      //   url: this.$http.adornUrl("/product/category/update/sort"),
+      //   method: "post",
+      //   data: this.$http.adornData(this.updateNodes, false),
+      // }).then(({ data }) => {
+      //   this.$message({
+      //     message: "菜单顺序修改成功",
+      //     type: "success",
+      //   });
+      //   // 刷新出新的菜单
+      //   this.getMenus();
+      //   // 设置需要默认展开的菜单
+      //   this.expandedKey = this.pCid;
+      //   this.updateNodes = [];
+      //   this.maxLevel = 0;
+      // });
     },
 
     // 更新子节点层级
@@ -211,10 +274,14 @@ export default {
       // 找到所有子节点，求出最大深度
       if (node.childNodes != null && node.childNodes.length > 0) {
         for (let i = 0; i < node.childNodes.length; i++) {
-          if (node.childNodes[i].level > this.maxLevel) {
-            this.maxLevel = node.childNodes[i].level;
+          if (
+            draggingNode.childNodes == null ||
+            draggingNode.childNodes.length == 0
+          ) {
+            this.maxLevel = draggingNode.level;
+          } else {
+            this.countNodeLevel(draggingNode);
           }
-          this.countNodeLevel(node.childNodes[i]);
         }
       }
     },
