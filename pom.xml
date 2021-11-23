@@ -33,6 +33,7 @@
     <properties>
         <spring-cloud.version>2020.0.1</spring-cloud.version>
         <spring-cloud-alibaba.version>2021.1</spring-cloud-alibaba.version>
+        <spring-boot-aliyun.version>1.0.0</spring-boot-aliyun.version>
         <spring-boot.version>2.4.2</spring-boot.version>
         <mybatis-plus.version>3.4.2</mybatis-plus.version>
         <mysql.version>8.0.25</mysql.version>
@@ -57,6 +58,15 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <!-- 阿里云 -->
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>aliyun-spring-boot-dependencies</artifactId>
+                <version>${spring-boot-aliyun.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
             <!-- mybatis plus -->
             <dependency>
                 <groupId>com.baomidou</groupId>
